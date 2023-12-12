@@ -11,6 +11,7 @@ from rest_framework import status
 from borrower import models
 from borrower import borrower_serializer
 from borrower import permissions
+from borrower import producer
 
 
 class BorrowerSignUp(viewsets.ModelViewSet):
@@ -19,6 +20,7 @@ class BorrowerSignUp(viewsets.ModelViewSet):
     permission_classes = [permissions.UpdateOwnProfile,]
     serializer_class = borrower_serializer.BorrowerSerializer
     queryset = models.Borrower.objects.all()
+    producer.publish('user signed up', serializer_class)
 
     def list(self, request, *args, **kwargs):
         return Response({"detail": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
